@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware para permitir JSON no corpo das requisições e CORS
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Trata caracteres especiais
 app.use(cors());
 
 // Conectar ao SQLite (cria o banco se não existir)
@@ -18,11 +19,11 @@ const db = new sqlite3.Database("./database.sqlite", (err) => {
         console.log("Conectado ao SQLite!");
         db.run(`CREATE TABLE IF NOT EXISTS contatos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT NOT NULL,
-            email TEXT NOT NULL,
-            celular TEXT NOT NULL,
-            setor TEXT NOT NULL,
-            mensagem TEXT NOT NULL,
+            nome TEXT COLLATE NOCASE,
+            email TEXT COLLATE NOCASE,
+            celular TEXT COLLATE NOCASEL,
+            setor TEXT COLLATE NOCASE,
+            mensagem TEXT COLLATE NOCASE,
             data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`);
     }
