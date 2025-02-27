@@ -8,15 +8,16 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware para permitir JSON no corpo das requisições e CORS
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Trata caracteres especiais
 app.use(cors());
 
 // Conectar ao SQLite (cria o banco se não existir)
 const db = new sqlite3.Database("./database.sqlite", (err) => {
-    if (err) {
-        console.error("Erro ao conectar ao banco de dados:", err.message);
-    } else {
-        console.log("Conectado ao SQLite!");
-        db.run(`CREATE TABLE IF NOT EXISTS contatos (
+  if (err) {
+    console.error("Erro ao conectar ao banco de dados:", err.message);
+  } else {
+    console.log("Conectado ao SQLite!");
+    db.run(`CREATE TABLE IF NOT EXISTS contatos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT NOT NULL,
             email TEXT NOT NULL,
@@ -25,37 +26,56 @@ const db = new sqlite3.Database("./database.sqlite", (err) => {
             mensagem TEXT NOT NULL,
             data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`);
-    }
+  }
 });
 
 // Rota para salvar os dados do formulário
 app.post("/contatos", (req, res) => {
-    const { nome, email, celular, setor, mensagem } = req.body;
-    if (!nome || !email || !celular || !setor || !mensagem) {
-        return res.status(400).json({ error: "Preencha todos os campos!" });
-    }
+  const { nome, email, celular, setor, mensagem } = req.body;
+  if (!nome || !email || !celular || !setor || !mensagem) {
+    return res.status(400).json({ error: "Preencha todos os campos!" });
+  }
 
-    const stmt = db.prepare("INSERT INTO contatos (nome, email, celular, setor, mensagem) VALUES (?, ?, ?, ?, ?)");
-    stmt.run(nome, email, celular, setor, mensagem, function (err) {
-        if (err) {
-            return res.status(500).json({ error: "Erro ao salvar no banco!" });
-        }
-        res.json({ success: true, id: this.lastID });
-    });
-    stmt.finalize();
+  const stmt = db.prepare(
+    "INSERT INTO contatos (nome, email, celular, setor, mensagem) VALUES (?, ?, ?, ?, ?)"
+  );
+  stmt.run(nome, email, celular, setor, mensagem, function (err) {
+    if (err) {
+      return res.status(500).json({ error: "Erro ao salvar no banco!" });
+    }
+    res.json({ success: true, id: this.lastID });
+  });
+  stmt.finalize();
 });
 
 // Rota para listar os contatos salvos
 app.get("/contatos", (req, res) => {
-    db.all("SELECT * FROM contatos ORDER BY data_envio DESC", (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: "Erro ao buscar os contatos!" });
-        }
-        res.json(rows);
-    });
+  db.all("SELECT * FROM contatos ORDER BY data_envio DESC", (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: "Erro ao buscar os contatos!" });
+    }
+    res.json(rows);
+  });
+});
+
+// ROTA PARA DELETAR UM CONTATO PELO ID
+app.delete("/contatos/:id", (req, res) => {
+  const { id } = req.params;
+
+  db.run("DELETE FROM contatos WHERE id = ?", [id], function (err) {
+    if (err) {
+      return res.status(500).json({ error: "Erro ao deletar contato" });
+    }
+
+    if (this.changes === 0) {
+      return res.status(404).json({ message: "Contato não encontrado" });
+    }
+
+    res.json({ message: "Contato deletado com sucesso" });
+  });
 });
 
 // Iniciar o servidor
 app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
