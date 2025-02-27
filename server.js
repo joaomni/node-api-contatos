@@ -19,11 +19,11 @@ const db = new sqlite3.Database("./database.sqlite", (err) => {
         console.log("Conectado ao SQLite!");
         db.run(`CREATE TABLE IF NOT EXISTS contatos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT COLLATE NOCASE,
-            email TEXT COLLATE NOCASE,
-            celular TEXT COLLATE NOCASEL,
-            setor TEXT COLLATE NOCASE,
-            mensagem TEXT COLLATE NOCASE,
+            nome TEXT NOT NULL,
+            email TEXT NOT NULL,
+            celular TEXT NOT NULLL,
+            setor TEXT NOT NULL,
+            mensagem TEXT NOT NULL,
             data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`);
     }
