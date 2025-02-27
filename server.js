@@ -21,7 +21,7 @@ const db = new sqlite3.Database("./database.sqlite", (err) => {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT NOT NULL,
             email TEXT NOT NULL,
-            celular TEXT NOT NULLL,
+            celular TEXT NOT NULL,
             setor TEXT NOT NULL,
             mensagem TEXT NOT NULL,
             data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
