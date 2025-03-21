@@ -28,6 +28,7 @@ const db = createClient({
         celular TEXT NOT NULL,
         setor TEXT NOT NULL,
         mensagem TEXT NOT NULL,
+        arquivo TEXT,
         data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )`
     );
