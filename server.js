@@ -47,7 +47,7 @@ app.post("/contatos", async (req, res) => {
 
   const query = `
   INSERT INTO contatos (nome, email, celular, setor, mensagem, arquivo) 
-  VALUES (?, ?, ?, ?, ?)
+  VALUES (?, ?, ?, ?, ?, ?)
 `;
 
   try {
