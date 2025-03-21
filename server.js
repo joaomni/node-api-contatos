@@ -40,20 +40,20 @@ const db = createClient({
 
 // Rota para salvar os dados do formulário
 app.post("/contatos", async (req, res) => {
-  const { nome, email, celular, setor, mensagem } = req.body;
-  if (!nome || !email || !celular || !setor || !mensagem) {
+  const { nome, email, celular, setor, mensagem, arquivo } = req.body;
+  if (!nome || !email || !celular || !setor || !mensagem || !arquivo) {
     return res.status(400).json({ error: "Preencha todos os campos!" });
   }
 
   const query = `
-  INSERT INTO contatos (nome, email, celular, setor, mensagem) 
+  INSERT INTO contatos (nome, email, celular, setor, mensagem, arquivo) 
   VALUES (?, ?, ?, ?, ?)
 `;
 
   try {
     const result = await db.execute({
       sql: query,
-      args: [nome, email, celular, setor, mensagem],
+      args: [nome, email, celular, setor, mensagem, arquivo],
     });
 
     // Convertendo BigInt para Number
