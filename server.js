@@ -47,6 +47,7 @@ await db.execute(`
     local_obra TEXT,
     tipo_imovel TEXT,
     tamanho_imovel TEXT,
+		investimento TEXT,
     ambientes TEXT,
     faixa_investimento TEXT,
     tem_arquiteto TEXT,
