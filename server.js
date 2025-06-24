@@ -35,42 +35,35 @@ const db = createClient({
 	}
 })()
 // Criar tabela formulario_cast se não existir
-;(async () => {
-	try {
-		await db.execute(`
-      CREATE TABLE IF NOT EXISTS formulario_cast (
-				id INTEGER PRIMARY KEY AUTOINCREMENT,
-				nome TEXT,
-				email TEXT,
-				telefone TEXT,
-				como_conheceu TEXT,
-				local_obra TEXT,
-				tipo_imovel TEXT,
-				tamanho_imovel TEXT,
-				ambientes TEXT,
-				investimento TEXT,
-				tem_arquiteto TEXT,
-				tem_experiencia TEXT,
-				preferencias TEXT,
-				previsao_fechamento TEXT,
-				outras_lojas TEXT,
-				estilo_decoracao TEXT,
-				receber_ofertas TEXT,
-				informacoes_adicionais TEXT,
-				ambiente_favorito TEXT,
-				forma_pagamento TEXT,
-				eletros_existentes TEXT,
-				granitos_instalados TEXT,
-				planta_imovel TEXT,
-				referencias TEXT,
-				data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-			)
-    `)
-		console.log("Tabela 'formulario_cast' verificada/criada!")
-	} catch (error) {
-		console.error('Erro ao criar tabela formulario_cast:', error)
-	}
-})()
+await db.execute(`
+  CREATE TABLE IF NOT EXISTS formulario_cast (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT,
+    email TEXT,
+    telefone TEXT,
+    como_conheceu TEXT,
+    local_obra TEXT,
+    tipo_imovel TEXT,
+    tamanho_imovel TEXT,
+    ambientes TEXT,
+    faixa_investimento TEXT,
+    tem_arquiteto TEXT,
+    tem_experiencia TEXT,
+    preferencias TEXT,
+    previsao_fechamento TEXT,
+    outras_lojas TEXT,
+    estilo_decoracao TEXT,
+    receber_ofertas TEXT,
+    informacoes_adicionais TEXT,
+    ambiente_favorito TEXT,
+    forma_pagamento TEXT,
+    eletros_existentes TEXT,
+    granitos_instalados TEXT,
+    planta_imovel TEXT,
+    referencias TEXT,
+    data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )
+`)
 app.post('/formulario-cast', async (req, res) => {
 	const {
 		nome,
@@ -142,7 +135,6 @@ app.post('/formulario-cast', async (req, res) => {
 		res.status(500).json({ error: 'Erro ao salvar formulário' })
 	}
 })
-
 app.get('/formulario-cast', async (req, res) => {
 	try {
 		const result = await db.execute('SELECT * FROM formulario_cast ORDER BY data_envio DESC')
@@ -160,7 +152,7 @@ app.get('/formulario-cast', async (req, res) => {
 		res.status(500).json({ error: 'Erro ao buscar dados' })
 	}
 })
-app.delete('/formulario_cast/:id', async (req, res) => {
+app.delete('/formulario-cast/:id', async (req, res) => {
 	const { id } = req.params
 
 	try {
