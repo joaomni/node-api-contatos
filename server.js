@@ -1,7 +1,9 @@
-require('dotenv').config()
-const express = require('express')
-const { createClient } = require('@libsql/client')
-const cors = require('cors')
+import dotenv from 'dotenv';
+dotenv.config();
+
+import express from 'express';
+import { createClient } from '@libsql/client';
+import cors from 'cors';
 
 const app = express()
 const PORT = process.env.PORT || 3000
