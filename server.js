@@ -39,37 +39,98 @@ const db = createClient({
 	try {
 		await db.execute(`
       CREATE TABLE IF NOT EXISTS formulario_cast (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome TEXT,
-        email TEXT,
-        telefone TEXT,
-        ambientes TEXT,
-        investimento TEXT,
-        planta_imovel TEXT,
-        referencias TEXT,
-        data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
+				id INTEGER PRIMARY KEY AUTOINCREMENT,
+				nome TEXT,
+				email TEXT,
+				telefone TEXT,
+				como_conheceu TEXT,
+				local_obra TEXT,
+				tipo_imovel TEXT,
+				tamanho_imovel TEXT,
+				ambientes TEXT,
+				investimento TEXT,
+				tem_arquiteto TEXT,
+				tem_experiencia TEXT,
+				preferencias TEXT,
+				previsao_fechamento TEXT,
+				outras_lojas TEXT,
+				estilo_decoracao TEXT,
+				receber_ofertas TEXT,
+				informacoes_adicionais TEXT,
+				ambiente_favorito TEXT,
+				forma_pagamento TEXT,
+				eletros_existentes TEXT,
+				granitos_instalados TEXT,
+				planta_imovel TEXT,
+				referencias TEXT,
+				data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			)
     `)
 		console.log("Tabela 'formulario_cast' verificada/criada!")
 	} catch (error) {
 		console.error('Erro ao criar tabela formulario_cast:', error)
 	}
 })()
-app.post('/formulario_cast', async (req, res) => {
-	const { nome, email, telefone, ambientes, investimento, planta_imovel, referencias } = req.body
+app.post('/formulario-cast', async (req, res) => {
+	const {
+		nome,
+		email,
+		telefone,
+		como_conheceu,
+		local_obra,
+		tipo_imovel,
+		tamanho_imovel,
+		ambientes,
+		investimento,
+		tem_arquiteto,
+		tem_experiencia,
+		preferencias,
+		previsao_fechamento,
+		outras_lojas,
+		estilo_decoracao,
+		receber_ofertas,
+		informacoes_adicionais,
+		ambiente_favorito,
+		forma_pagamento,
+		eletros_existentes,
+		granitos_instalados,
+		planta_imovel,
+		referencias
+	} = req.body
 
 	try {
 		await db.execute({
 			sql: `
-        INSERT INTO formulario_cast 
-        (nome, email, telefone, ambientes, investimento, planta_imovel, referencias) 
-        VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        INSERT INTO formulario_cast (
+          nome, email, telefone, como_conheceu, local_obra, tipo_imovel,
+          tamanho_imovel, ambientes, investimento, tem_arquiteto, tem_experiencia,
+          preferencias, previsao_fechamento, outras_lojas, estilo_decoracao,
+          receber_ofertas, informacoes_adicionais, ambiente_favorito,
+          forma_pagamento, eletros_existentes, granitos_instalados,
+          planta_imovel, referencias
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 			args: [
 				nome || '',
 				email || '',
 				telefone || '',
+				como_conheceu || '',
+				local_obra || '',
+				tipo_imovel || '',
+				tamanho_imovel || '',
 				JSON.stringify(ambientes || []),
 				investimento || '',
+				tem_arquiteto || '',
+				tem_experiencia || '',
+				preferencias || '',
+				previsao_fechamento || '',
+				outras_lojas || '',
+				estilo_decoracao || '',
+				receber_ofertas || '',
+				informacoes_adicionais || '',
+				ambiente_favorito || '',
+				forma_pagamento || '',
+				eletros_existentes || '',
+				granitos_instalados || '',
 				JSON.stringify(planta_imovel || []),
 				JSON.stringify(referencias || [])
 			]
@@ -81,7 +142,8 @@ app.post('/formulario_cast', async (req, res) => {
 		res.status(500).json({ error: 'Erro ao salvar formulário' })
 	}
 })
-app.get('/formulario_cast', async (req, res) => {
+
+app.get('/formulario-cast', async (req, res) => {
 	try {
 		const result = await db.execute('SELECT * FROM formulario_cast ORDER BY data_envio DESC')
 		// Parse campos JSON
