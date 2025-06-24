@@ -81,7 +81,7 @@ app.post('/formulario_cast', async (req, res) => {
 		res.status(500).json({ error: 'Erro ao salvar formulário' })
 	}
 })
-app.get('/formulario_cast', async (req, res) => {
+app.get('/formulario-cast', async (req, res) => {
 	try {
 		const result = await db.execute('SELECT * FROM formulario_cast ORDER BY data_envio DESC')
 		// Parse campos JSON
@@ -98,7 +98,7 @@ app.get('/formulario_cast', async (req, res) => {
 		res.status(500).json({ error: 'Erro ao buscar dados' })
 	}
 })
-app.delete('/formulario_cast/:id', async (req, res) => {
+app.delete('/formulario-cast/:id', async (req, res) => {
 	const { id } = req.params
 
 	try {
